@@ -8,7 +8,7 @@ import labirinto.domain.Cell;
 import labirinto.domain.Cell.CellEnum;
 import labirinto.domain.Walker;
 
-public class Libs {
+public class Lib {
     
     public static String fileReader(String path) throws IOException {
         return new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
@@ -52,21 +52,4 @@ public class Libs {
         }
         return matrix;
     }
-    
-    public static int[] findWalkerPosition (Cell[][] matrix) {
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[0].length; j++) {
-                if (matrix[i][j].walker != null) {
-                    return new int[] {i,j};
-                }
-            }
-        }
-        return null;
-    }
-    
-    public static String printWalkerPosition(Cell[][] matrix) {
-        int[] position = Libs.findWalkerPosition(matrix);
-        return String.format("[X: %d, Y: %d]", position[0], position[1]);
-    }
-    
 }

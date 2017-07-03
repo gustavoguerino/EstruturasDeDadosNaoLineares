@@ -1,7 +1,8 @@
 package labirinto;
 
 import java.io.IOException;
-import labirinto.domain.Cell;
+import java.util.ArrayList;
+import labirinto.domain.Matrix;
 
 public class Main {
     /**
@@ -9,8 +10,11 @@ public class Main {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
-        String fileContents = Libs.fileReader("teste.dat");
-        Cell[][] matrix = Libs.matrixify(fileContents);
-        System.out.println(Libs.printWalkerPosition(matrix));
+        String fileContents = Lib.fileReader("teste.dat");
+        Matrix matrix = new Matrix(Lib.matrixify(fileContents));
+        System.out.println(matrix.printWalkerPosition());
+        int[] playerPosition = matrix.findWalkerPosition();
+        matrix.findShortestPath(new ArrayList<>(), playerPosition[0], playerPosition[1]);
+        System.out.println("Fim! Caminho é: " + matrix.minVisitedNodes + " de tamanho: " + matrix.minDist);
     }
 }
