@@ -9,6 +9,7 @@ public class Main {
 	    labirinto.iniciaLabirinto("teste.dat");
 	    labirinto.printaSaidas();
 	    labirinto.printaPosicaoJogador();
-	    labirinto.printaArestas(1,2);
+	    labirinto.printaArestas(1,4);
+	    labirinto.acharMenorCaminho();
     }
 }

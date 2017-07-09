@@ -1,9 +1,9 @@
 package multigrafo;
 
 public interface InterfaceVertices {
-    public abstract int getChave();
+    public abstract String  getChave();
 
-    public abstract void setChave(int chave);
+    public abstract void setChave(String chave);
 
     public abstract double getValor();
 

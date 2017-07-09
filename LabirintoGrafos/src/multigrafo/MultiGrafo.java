@@ -132,9 +132,9 @@ public class MultiGrafo implements InterfaceMultigrafo {
         return grau;
     }
 
-    private int achaIndice(int chave) {
+    protected int achaIndice(String chave) {
         for (int i = 0; i < vertices.size(); i++) {
-            if (vertices.get(i).getChave() == chave) return i;
+            if (vertices.get(i).getChave().equals(chave)) return i;
         }
         return -1;
     }

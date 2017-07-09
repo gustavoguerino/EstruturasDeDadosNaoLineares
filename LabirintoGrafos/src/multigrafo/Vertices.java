@@ -1,19 +1,19 @@
 package multigrafo;
 
 public class Vertices implements InterfaceVertices {
-    private int chave;
+    private String chave;
     private double valor;
 
-    public Vertices(int chave, double valor) {
+    public Vertices(String chave, double valor) {
         this.chave = chave;
         this.valor = valor;
     }
     
-    public int getChave() {
+    public String getChave() {
         return chave;
     }
 
-    public void setChave(int chave) {
+    public void setChave(String chave) {
         this.chave = chave;
     }
     
