@@ -6,10 +6,10 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 	    Labirinto labirinto = new Labirinto();
-	    labirinto.iniciaLabirinto("teste.dat");
+	    labirinto.iniciaLabirinto("teste2.dat");
 	    labirinto.printaSaidas();
 	    labirinto.printaPosicaoJogador();
-	    labirinto.printaArestas(1,4);
+	    labirinto.printaArestas(18,19);
 	    labirinto.acharMenorCaminho();
     }
 }

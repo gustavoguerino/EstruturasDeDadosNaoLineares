@@ -13,18 +13,22 @@ class GrafoLabirinto extends MultiGrafo {
         int indiceTmp = achaIndice(String.format("%d-%d", indiceVerticeI-1, indiceVerticeJ));
         if (indiceTmp != -1 && isIniciado(indiceTmp)) {
             insereAresta(vertices().get(indiceTmp), vertices, 1);
+            insereAresta(vertices, vertices().get(indiceTmp), 1);
         }
         indiceTmp = achaIndice(String.format("%d-%d", indiceVerticeI, indiceVerticeJ-1));
         if (indiceTmp != -1 && isIniciado(indiceTmp)) {
             insereAresta(vertices().get(indiceTmp), vertices, 1);
+            insereAresta(vertices, vertices().get(indiceTmp), 1);
         }
         indiceTmp = achaIndice(String.format("%d-%d", indiceVerticeI+1, indiceVerticeJ));
         if (indiceTmp != -1 && isIniciado(indiceTmp)) {
             insereAresta(vertices().get(indiceTmp), vertices, 1);
+            insereAresta(vertices, vertices().get(indiceTmp), 1);
         }
         indiceTmp = achaIndice(String.format("%d-%d", indiceVerticeI, indiceVerticeJ+1));
         if (indiceTmp != -1 && isIniciado(indiceTmp)) {
             insereAresta(vertices().get(indiceTmp), vertices, 1);
+            insereAresta(vertices, vertices().get(indiceTmp), 1);
         }
     }
 
@@ -43,8 +47,13 @@ class GrafoLabirinto extends MultiGrafo {
     List<Arestas> getArestasVertice(Vertices verticeOrigem) {
         List<Arestas> arestasList = new ArrayList<>();
         int indiceVertice = achaIndice(verticeOrigem.getChave());
+        System.out.println("chave vertice: " + verticeOrigem.getChave() + " " + indiceVertice);
         if (isIniciado(indiceVertice)) {
-            for (int i = 0; i < ordem(); i++) arestasList.addAll(matrizAdj[indiceVertice][i]);
+            for (int i = 0; i < ordem() ; i++){
+            	if(matrizAdj[indiceVertice][i] != null)
+            		arestasList.addAll(matrizAdj[indiceVertice][i]);
+            }
+
         }
         return arestasList;
     }

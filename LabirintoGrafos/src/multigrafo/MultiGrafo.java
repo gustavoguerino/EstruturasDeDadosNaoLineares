@@ -19,7 +19,7 @@ public class MultiGrafo implements InterfaceMultigrafo {
     public void inserirVertice(Vertices vertice) {
         int novaQtdLinhasColunas = this.ordem() + 1;
         List<Arestas> novaMatriz[][] = (ArrayList<Arestas>[][])
-                new ArrayList[novaQtdLinhasColunas][novaQtdLinhasColunas];
+        new ArrayList[novaQtdLinhasColunas][novaQtdLinhasColunas];
         for (int i = 0; i < this.ordem(); i++) {
             System.arraycopy(matrizAdj[i], 0, novaMatriz[i], 0, this.ordem());
         }

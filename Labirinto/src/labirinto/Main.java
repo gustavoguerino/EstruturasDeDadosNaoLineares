@@ -10,7 +10,7 @@ public class Main {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
-        String fileContents = Lib.fileReader("teste.dat");
+        String fileContents = Lib.fileReader("teste2.dat");
         Matrix matrix = new Matrix(Lib.matrixify(fileContents));
         System.out.println(matrix.printWalkerPosition());
         int[] playerPosition = matrix.findWalkerPosition();

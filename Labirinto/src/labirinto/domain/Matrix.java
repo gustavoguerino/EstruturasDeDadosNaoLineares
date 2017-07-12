@@ -8,6 +8,7 @@ public class Matrix {
     public Cell[][] matrix;
     public int minDist;
     public List minVisitedNodes;
+    public List stringPath;
     public int matrixY;
     public int matrixX;
     
@@ -17,6 +18,7 @@ public class Matrix {
         this.minVisitedNodes = null;
         this.matrixY = 0;
         this.matrixX = 0;
+        this.stringPath = null;
     }
     
     public int[] findWalkerPosition () {
@@ -53,6 +55,7 @@ public class Matrix {
             if (matrix[i][j].cellType == CellEnum.CELULA_SAIDA && visitedNodes.size() < minDist) {
                 List newVisitedNodes = new ArrayList<>(visitedNodes);
                 newVisitedNodes.add(matrix[i][j]);
+                
                 minDist = newVisitedNodes.size();
                 minVisitedNodes = newVisitedNodes;
             }
