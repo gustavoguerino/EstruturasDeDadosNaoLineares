@@ -73,7 +73,9 @@ public class Labirinto {
     }
 
     void acharMenorCaminho() {
-        algoritmoDijkstra(grafoLabirinto.getArestasVertice(verticeJogador), new ArrayList<>(), 0);
+        List<Vertices> caminhoInicial = new ArrayList<>();
+        caminhoInicial.add(verticeJogador);
+        algoritmoDijkstra(grafoLabirinto.getArestasVertice(verticeJogador), caminhoInicial , 0);
         System.out.println("Menor caminho foi: " + ((menorCaminho != null) ? menorCaminho : "não achado"));
         System.out.println("Custo do menor caminho: " + ((menorCaminhoValor != Double.MAX_VALUE) ? menorCaminhoValor : "0"));
     }
@@ -92,14 +94,17 @@ public class Labirinto {
             } else {
                 verticeAlvo = arestas.getVerticeDestino();
             }
-            novoCaminho.add(verticeAlvo);
-            if (listaDeSaidasVertices.contains(verticeAlvo) && valorAtual < menorCaminhoValor) {
-                    menorCaminhoValor = arestas.getValor() + caminhoValor;
-                    menorCaminho = novoCaminho;
-            }
-            List<Arestas> arestasAlvo = grafoLabirinto.getArestasVertice(verticeAlvo);
-            if ((valorAtual < menorCaminhoValor || menorCaminhoValor == Double.MAX_VALUE) && arestasAlvo != null) {
-                algoritmoDijkstra(arestasAlvo, novoCaminho, valorAtual);
+            // se já passou pelo vértice então para a execução por esse caminho
+            if (!novoCaminho.contains(verticeAlvo)) {
+                novoCaminho.add(verticeAlvo);
+                if (listaDeSaidasVertices.contains(verticeAlvo) && valorAtual < menorCaminhoValor) {
+                        menorCaminhoValor = arestas.getValor() + caminhoValor;
+                        menorCaminho = novoCaminho;
+                }
+                List<Arestas> arestasAlvo = grafoLabirinto.getArestasVertice(verticeAlvo);
+                if ((valorAtual < menorCaminhoValor || menorCaminhoValor == Double.MAX_VALUE) && arestasAlvo != null) {
+                    algoritmoDijkstra(arestasAlvo, novoCaminho, valorAtual);
+                }
             }
         }
     }
