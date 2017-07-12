@@ -28,10 +28,6 @@ public class Labirinto {
         menorCaminhoValor = Double.MAX_VALUE;
     }
 
-    void printaArestas(int i, int j) {
-        grafoLabirinto.printaArestas(i, j);
-    }
-
     void printaPosicaoJogador() {
         System.out.println("[X:" + coordenadaJogador[1] + ", Y:" + coordenadaJogador[0] + "]");
     }
@@ -53,7 +49,7 @@ public class Labirinto {
             Character character = fileContents.charAt(k);
             if (character != '\n') {
                 Vertices vertices = new Vertices(String.format("%d-%d", i, j), 0);
-                int verticeIndice = grafoLabirinto.vertices().size()-1;
+                int verticeIndice = grafoLabirinto.vertices().size();
                 this.grafoLabirinto.inserirVertice(vertices);
                 if (character != '1') {
                     grafoLabirinto.iniciaIndice(verticeIndice);
@@ -77,22 +73,33 @@ public class Labirinto {
     }
 
     void acharMenorCaminho() {
-        algoritmoDijkstra(grafoLabirinto.getArestasVertice(verticeJogador), null, 0);
+        algoritmoDijkstra(grafoLabirinto.getArestasVertice(verticeJogador), new ArrayList<>(), 0);
         System.out.println("Menor caminho foi: " + ((menorCaminho != null) ? menorCaminho : "não achado"));
         System.out.println("Custo do menor caminho: " + ((menorCaminhoValor != Double.MAX_VALUE) ? menorCaminhoValor : "0"));
     }
 
+    void printaArestasVertices(String chaveVertice) {
+        grafoLabirinto.printaArestasVertices(chaveVertice);
+    }
+
     private void algoritmoDijkstra(List<Arestas> arestasList, List<Vertices> caminho, double caminhoValor) {
         for (Arestas arestas : arestasList) {
+            List<Vertices> novoCaminho = new ArrayList<>(caminho);
             double valorAtual = arestas.getValor() + caminhoValor;
-            caminho.add(arestas.getVerticeDestino());
-            if (listaDeSaidasVertices.contains(arestas.getVerticeDestino()) && valorAtual < menorCaminhoValor) {
-                    menorCaminhoValor = arestas.getValor() + caminhoValor;
-                    menorCaminho = caminho;
+            Vertices verticeAlvo;
+            if (novoCaminho.contains(arestas.getVerticeDestino())) {
+                verticeAlvo = arestas.getVerticeOrigem();
+            } else {
+                verticeAlvo = arestas.getVerticeDestino();
             }
-            List<Arestas> arestasAlvo = grafoLabirinto.getArestasVertice(arestas.getVerticeDestino());
-            if ((valorAtual < caminhoValor || caminhoValor == Double.MAX_VALUE) && arestasAlvo != null) {
-                algoritmoDijkstra(arestasAlvo, caminho, valorAtual);
+            novoCaminho.add(verticeAlvo);
+            if (listaDeSaidasVertices.contains(verticeAlvo) && valorAtual < menorCaminhoValor) {
+                    menorCaminhoValor = arestas.getValor() + caminhoValor;
+                    menorCaminho = novoCaminho;
+            }
+            List<Arestas> arestasAlvo = grafoLabirinto.getArestasVertice(verticeAlvo);
+            if ((valorAtual < menorCaminhoValor || menorCaminhoValor == Double.MAX_VALUE) && arestasAlvo != null) {
+                algoritmoDijkstra(arestasAlvo, novoCaminho, valorAtual);
             }
         }
     }
