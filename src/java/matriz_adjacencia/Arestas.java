@@ -51,7 +51,7 @@ public class Arestas implements Comparable<Arestas> {
         this.direcionada = direcionada;
     }
 
-    public double getValor() {
+    public Double getValor() {
         return valor;
     }
 

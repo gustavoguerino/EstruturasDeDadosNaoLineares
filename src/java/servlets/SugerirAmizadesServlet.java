@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import dominio.Amizade;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.TreeSet;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +18,7 @@ public class SugerirAmizadesServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json");
-        TreeSet<Amizade> sugestoesAmizades = RedeSocial.sugerirAmizades(0);
+        ArrayList<Amizade> sugestoesAmizades = RedeSocial.sugerirAmizades(0);
         try (PrintWriter out = response.getWriter()) {
             out.println(new Gson().toJson(sugestoesAmizades));
         }

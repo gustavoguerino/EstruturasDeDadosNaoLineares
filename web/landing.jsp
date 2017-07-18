@@ -1,5 +1,5 @@
 <%@page import="dominio.Amizade"%>
-<%@page import="java.util.TreeSet"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -21,7 +21,7 @@
                 <p><span id='user-name'><%= String.format("%s (id %d)", request.getAttribute("userName").toString(), Integer.parseInt(request.getAttribute("userId").toString())) %></span></p>
                 <p>
                     <%
-                        TreeSet<Amizade> sugestoesAmizades = (TreeSet<Amizade>) request.getAttribute("sugestoesAmizades");
+                        ArrayList<Amizade> sugestoesAmizades = (ArrayList<Amizade>) request.getAttribute("sugestoesAmizades");
                         for (Amizade amizade : sugestoesAmizades) {
                             out.println(String.format("<p><b>Amigo %s: </b>%s (valor da amizade: %.1f)</p>", 
                                     amizade.getPessoaOrigem().getValor(),
