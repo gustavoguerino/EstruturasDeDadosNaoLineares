@@ -3,6 +3,7 @@ package matriz_adjacencia;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import dominio.Amizade;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -22,6 +23,11 @@ public class RedeSocial {
     public static GrafoSimples grafo;
     public static HashMap<Vertices, TreeSet<Arestas>> amizades;
     public static int maxSuggestions;
+    
+    /*
+        VÉRTICES SÃO AS PESSOAS
+        ARESTAS SÃO AS RELAÇÕES DE AMIZADES
+     */
 
     public static void initialize() {
         amizades = new HashMap<>();
@@ -31,15 +37,10 @@ public class RedeSocial {
         maxSuggestions = 6;
     }
 
-    /*
-        VÉRTICES SÃO AS PESSOAS
-        ARESTAS SÃO AS RELAÇÕES DE AMIZADES
-     */
-
-    public static void criaGrafo() throws IOException {
+    public static void criarGrafo() throws IOException {
         initialize();
         String fileContents = new String(Files.readAllBytes(
-                Paths.get("/home/joaopaulo/NetBeansProjects/REDE-SOCIAL-TESTE/grafo2.txt")
+                Paths.get("/home/joaosouza/tads/EstruturasDeDadosNaoLineares/grafo2.txt")
         ), StandardCharsets.UTF_8);
         int fileContentsLength = fileContents.length();
         ArrayList<String> nomes = gerarNomes();
@@ -82,13 +83,12 @@ public class RedeSocial {
     }
 
     // Sugere novas amizades com base nas amizades dos amigos
-    public static ArrayList<Vertices[]> sugerirAmizades(int idUsuario) {
-        int verticesSize = grafo.vertices().size();
-        ArrayList<Vertices[]> sugestoesAmigos = new ArrayList<>();
-        if (verticesSize == 1) {
-            // Só tem um usuário no sistema
-            return sugestoesAmigos;
+    public static TreeSet<Amizade> sugerirAmizades(int idUsuario) throws IOException {
+        if (grafo == null) {
+            criarGrafo();
         }
+        int verticesSize = grafo.vertices().size();
+        TreeSet<Amizade> sugestoesAmigos = new TreeSet<>();
         Vertices usuario = grafo.vertices().get(grafo.achaIndice(idUsuario));
         TreeSet<Arestas> amizadesUsuario = amizades.get(usuario);
         if (amizadesUsuario.isEmpty()) {
@@ -98,7 +98,7 @@ public class RedeSocial {
             while (i < maxSuggestions && !usuariosAleatorios.isEmpty()) {
                 Vertices vTemp = grafo.vertices().get(randomGenerator.nextInt(verticesSize));
                 if (!usuariosAleatorios.contains(vTemp) && vTemp.getChave() != idUsuario) {
-                    sugestoesAmigos.add(new Vertices[] { usuario, vTemp });
+                    sugestoesAmigos.add(new Amizade(usuario, vTemp, 0.0));
                     i++;
                 }
                 usuariosAleatorios.remove(vTemp);
@@ -109,7 +109,7 @@ public class RedeSocial {
             Iterator<Arestas> iterAmizades = algoritmoSugestoesAmigos(amizadesUsuario).iterator();
             while (i < maxSuggestions && iterAmizades.hasNext()) {
                 Arestas arestasTmp = iterAmizades.next();
-                sugestoesAmigos.add(new Vertices[]{arestasTmp.getVerticeOrigem(), arestasTmp.getVerticeDestino()});
+                sugestoesAmigos.add(new Amizade(arestasTmp.getVerticeOrigem(), arestasTmp.getVerticeDestino(), arestasTmp.getValor()));
                 i++;
             }
         }
@@ -117,13 +117,15 @@ public class RedeSocial {
     }
 
     private static TreeSet<Arestas> algoritmoSugestoesAmigos(TreeSet<Arestas> amigos) {
+        ArrayList<Vertices> amigosJaAdicionados = new ArrayList<>();
         TreeSet<Arestas> filtroAmizades = new TreeSet<>();
         amigos.forEach((arestas) -> {
             TreeSet<Arestas> innerFiltroAmizades
                     = amizades.get(grafo.vertices().get(grafo.achaIndice(arestas.getVerticeDestino().getChave())));
             innerFiltroAmizades.forEach((innerArestas) -> {
-                if (filtroAmizades.contains(innerArestas)) {
+                if (!amigosJaAdicionados.contains(innerArestas.getVerticeDestino())) {
                     filtroAmizades.add(innerArestas);
+                    amigosJaAdicionados.add(innerArestas.getVerticeDestino());
                 }
             });
         });
@@ -143,7 +145,7 @@ public class RedeSocial {
             InputStreamReader reader = new InputStreamReader(url.openStream());
             JsonArray jsonArray = new Gson().fromJson(reader, JsonArray.class);
             for (JsonElement element : jsonArray) {
-                nomes.add(element.toString());
+                nomes.add(element.toString().replace("\"", ""));
             }
         } catch (Exception exception) {
             nomes = new ArrayList<>();

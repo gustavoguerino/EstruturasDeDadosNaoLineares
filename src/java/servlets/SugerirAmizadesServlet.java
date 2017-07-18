@@ -1,26 +1,44 @@
 package servlets;
 
+import com.google.gson.Gson;
+import dominio.Amizade;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.TreeSet;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import matriz_adjacencia.RedeSocial;
-import matriz_adjacencia.Vertices;
 
-@WebServlet(name = "AutenticacaoServlet", urlPatterns = {"/AutenticacaoServlet"})
-public class AutenticacaoServlet extends HttpServlet {
-    
+@WebServlet(name = "SugerirAmizadesServlet", urlPatterns = {"/SugerirAmizadesServlet"})
+public class SugerirAmizadesServlet extends HttpServlet {
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        Integer userId = request.getParameter("user").equals("") ? 0 : Integer.parseInt(request.getParameter("user"));
-        Vertices user = RedeSocial.grafo.vertices().get(RedeSocial.grafo.achaIndice(userId));
-        request.setAttribute("userId", user.getChave());
-        request.setAttribute("userName", user.getValor());
-        request.setAttribute("sugestoesAmizades", RedeSocial.sugerirAmizades(userId));
-        request.getRequestDispatcher("/landing.jsp").forward(request, response);
+        response.setContentType("application/json");
+        TreeSet<Amizade> sugestoesAmizades = RedeSocial.sugerirAmizades(0);
+        try (PrintWriter out = response.getWriter()) {
+            out.println(new Gson().toJson(sugestoesAmizades));
+        }
+        /*
+            String strToBuild = "";
+            for (Amizade sugestao : sugestoesAmizades) {
+                strToBuild += String.format("<p><b>Amigo %s: </b>%s (valor da amizade: %.1f)</p>", sugestao.getPessoaOrigem().getValor(), sugestao.getPessoaDestino().getValor(), sugestao.getValorAmizade());
+            }
+            try (PrintWriter out = response.getWriter()) {
+                out.println("<!DOCTYPE html>");
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>Servlet SugerirAmizadesServlet</title>");
+                out.println("</head>");
+                out.println("<body>");
+                out.println(new Gson().toJson(sugestoesAmizades));
+                out.println("</body>");
+                out.println("</html>");
+            }
+         */
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

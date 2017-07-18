@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package servlets;
 
 import java.io.IOException;
@@ -7,20 +12,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import matriz_adjacencia.RedeSocial;
-import matriz_adjacencia.Vertices;
 
-@WebServlet(name = "AutenticacaoServlet", urlPatterns = {"/AutenticacaoServlet"})
-public class AutenticacaoServlet extends HttpServlet {
-    
+/**
+ *
+ * @author joaosouza
+ */
+@WebServlet(name = "InitServlet", urlPatterns = {"/InitServlet"})
+public class InitServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        Integer userId = request.getParameter("user").equals("") ? 0 : Integer.parseInt(request.getParameter("user"));
-        Vertices user = RedeSocial.grafo.vertices().get(RedeSocial.grafo.achaIndice(userId));
-        request.setAttribute("userId", user.getChave());
-        request.setAttribute("userName", user.getValor());
-        request.setAttribute("sugestoesAmizades", RedeSocial.sugerirAmizades(userId));
-        request.getRequestDispatcher("/landing.jsp").forward(request, response);
+        try {
+            RedeSocial.criarGrafo();
+            request.setAttribute("mensagem", "S: Grafo iniciado com sucesso.");
+        } catch (Exception ex) {
+            request.setAttribute("mensagem", "E: " + ex.getMessage());
+        }
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
