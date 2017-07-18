@@ -27,18 +27,18 @@ public class Main {
         
         OBS: RedeSocial.inserirAmizade(IDOrigem, pesoAmizadeParaOrigem, IDAmigo, pesoAmizadeParaAmigo); 
         
-        Usando arestas valoradas, ou seja cada relação tem um peso, 
+        Usando arestas valoradas, ou seja cada relaï¿½ï¿½o tem um peso, 
         eu posso considerar uma pessoa como 4, e e pessoa me considerar 1..
         
         Valores negativos para inimizade..
         
         
-        Considero no calculo apenas o peso da relação do amigo sobre o amigo dele, e não o contrario.
+        Considero no calculo apenas o peso da relaï¿½ï¿½o do amigo sobre o amigo dele, e nï¿½o o contrario.
         
         */
         s1.inserirAmizade(1, 5, 2, 5); 
         
-        s1.inserirAmizade(2, 5, 3, 5);
+        s1.inserirAmizade(2, 2, 3, 1);
         s1.inserirAmizade(2, 4, 4, 5);
         s1.inserirAmizade(2, 3, 5, 5);
         s1.inserirAmizade(2, 2, 6, 5);

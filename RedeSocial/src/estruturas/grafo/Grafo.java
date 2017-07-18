@@ -130,6 +130,17 @@ public class Grafo {
             }
         }
         return arestas;
+    }    
+//====================================================================================
+    //              PEGAR ARESTAS CONECTADAS
+    //              Retorna todos as arestas ligadas a um vertice passado como parametro
+    //------------------------------------------------------------------------------------
+    protected Aresta encontrarAresta(int chave1, int chave2) {
+        int indice = encontraIndice(chave1), indice2 = encontraIndice(chave2);
+        if(indice != -1 && indice2 != -1){
+           return matrizAdjacencia[indice][indice2];
+        }
+        return null;
     }
 
 

@@ -30,6 +30,12 @@ public class RedeSocial extends estruturas.grafo.Grafo{
         inserirAresta(id1, id2, valor1);
         inserirAresta(id2, id1, valor2);
     }
+    public void alterarAmizade(int id1, int id2, int novoValor){
+        Aresta aresta = encontrarAresta(id1, id2);
+        if(aresta != null){
+            aresta.setValor(novoValor);
+        }
+    }
     public void removerAmizade(int id1, int id2){
         removerAresta(id1, id2);
         removerAresta(id2, id1);
@@ -50,13 +56,13 @@ public class RedeSocial extends estruturas.grafo.Grafo{
         	for (Iterator iteratorAdm = arestasConectados(amigo.getDestino().getChave()).iterator(); iteratorAdm.hasNext();) {
             	Aresta amigoDoAmigo = (Aresta) iteratorAdm.next();
             	
-            	if(id != amigo.getDestino().getChave()){
+            	if(id != amigoDoAmigo.getDestino().getChave()){
             		
 		            int peso = 0, pesoAtual = 0;
 		            peso = (Math.abs(amigo.getValor() * amigoDoAmigo.getValor()));
 		            if(this.sugestoes.containsKey(amigoDoAmigo.getDestino().getChave()))
 		            	pesoAtual = this.sugestoes.get( amigoDoAmigo.getDestino());
-		            if(amigo.getValor() < 0)
+		            if(amigo.getValor() < 0 || amigoDoAmigo.getValor() < 0)
 		            	this.sugestoes.put( amigoDoAmigo.getDestino(),pesoAtual - peso);
 		            else
 		            	this.sugestoes.put( amigoDoAmigo.getDestino(),pesoAtual + peso);
@@ -65,7 +71,7 @@ public class RedeSocial extends estruturas.grafo.Grafo{
         }
         System.out.println("Calculado = " + sugestoes);
         Vertice maxEntry = Collections.max(sugestoes.entrySet(), Map.Entry.comparingByValue()).getKey();      
-        //Retorna o amigo com maior pontuação..
+        //Retorna o amigo com maior pontuaï¿½ï¿½o..
         return maxEntry;
     }
 }
