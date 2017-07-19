@@ -16,8 +16,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class RedeSocial {
 
@@ -42,7 +44,7 @@ public class RedeSocial {
     public static void criarGrafo() throws IOException {
         initialize();
         String fileContents = new String(Files.readAllBytes(
-                Paths.get("/home/joaosouza/tads/EstruturasDeDadosNaoLineares/grafo2.txt")
+                Paths.get("/home/joaopaulo/tads/EstruturasDeDadosNaoLineares/grafo2.txt")
         ), StandardCharsets.UTF_8);
 
         ArrayList<String> nomes = gerarNomes();
@@ -112,7 +114,8 @@ public class RedeSocial {
             }
         } else {
             int i = 0;
-            Iterator<Arestas> iterAmizades = sugestoesAmigos(amizadesUsuario).iterator();
+            //Iterator<Arestas> iterAmizades = sugestoesAmigos(amizadesUsuario).iterator();
+            Iterator<Arestas> iterAmizades = BFS(usuario).iterator();
             while (i < maxSuggestions && iterAmizades.hasNext()) {
                 Arestas arestasTmp = iterAmizades.next();
                 sugestoesAmigos.add(new Amizade(arestasTmp.getVerticeOrigem(), arestasTmp.getVerticeDestino(), arestasTmp.getValor()));
@@ -141,31 +144,48 @@ public class RedeSocial {
         return listaAmizades;
     }
 
-    private static ArrayList<Arestas> BFS(Vertices usuario) {
-        int depth = 0;
-        HashMap<Vertices, Arestas> filtroAmizades = new HashMap<>();
+    private static List<Arestas> BFS(Vertices usuario) {
+        // lógica de visitação
+        ArrayList<Arestas> listaAmizadesAmigos = new ArrayList<>();
+        ArrayList<Vertices> amigosUsuario = new ArrayList<>();
+        amizades.get(usuario).forEach((arestas) -> {
+            amigosUsuario.add(arestas.getVerticeDestino());
+        });
 
+        // lógica do BFS
         ArrayList<Vertices> visitados = new ArrayList<>();
         Queue<Vertices> buscaAmizades = new LinkedList<>();
         buscaAmizades.add(usuario); // initializes with root
-        
-        while (!buscaAmizades.isEmpty() && depth != 2) {
+
+        do {
             Vertices amigo = buscaAmizades.poll();     // dequeue
-            if (!visitados.contains(amigo)) {
-                visitados.add(amigo);
-                Queue<Vertices> amizadesAmigo = new LinkedList<>();
-                amizades.get(amigo).forEach((arestas) -> {
-                    if (!filtroAmizades.containsKey(arestas.getVerticeOrigem())
-                            || (arestas.getValor() > filtroAmizades.get(arestas.getVerticeOrigem()).getValor() && !visitados.contains(arestas.getVerticeDestino()))) {
-                        filtroAmizades.put(arestas.getVerticeOrigem(), arestas);
-                    }
-                    amizadesAmigo.add(arestas.getVerticeDestino());
-                });
-                buscaAmizades.addAll(amizadesAmigo); // extend
-                depth++;
+            visitados.add(amigo);
+            Iterator<Arestas> iteradorAmizade = amizades.get(amigo).iterator();
+            while (iteradorAmizade.hasNext()) {
+                Arestas arestas = iteradorAmizade.next();
+                listaAmizadesAmigos.add(arestas);
+                if (!visitados.contains(arestas.getVerticeDestino())) {
+                    buscaAmizades.add(arestas.getVerticeDestino()); // extend
+                }
             }
-        }
-        return null;
+        } while (!buscaAmizades.isEmpty() && amigosUsuario.contains(buscaAmizades.peek()));
+        
+        HashMap<Vertices, Arestas> listaAmizadesAmigos_ = new HashMap<>();
+        List<Arestas> lista = listaAmizadesAmigos.stream().filter(
+                p -> !p.getVerticeOrigem().equals(usuario) && 
+                !amigosUsuario.contains(p.getVerticeDestino()) &&
+                !p.getVerticeDestino().equals(usuario)
+        ).collect(Collectors.toList());
+        lista.forEach((arestas) -> {
+            if (!listaAmizadesAmigos_.containsKey(arestas.getVerticeDestino()) ||
+                    listaAmizadesAmigos_.get(arestas.getVerticeDestino()).getValor() < arestas.getValor()) {
+                listaAmizadesAmigos_.put(arestas.getVerticeDestino(), arestas);
+            }
+        });
+        listaAmizadesAmigos = new ArrayList<>();
+        listaAmizadesAmigos.addAll(listaAmizadesAmigos_.values());
+        Collections.sort(listaAmizadesAmigos, (Arestas a1, Arestas a2) -> a2.getValor().compareTo(a1.getValor()));
+        return listaAmizadesAmigos;
     }
 
     public void deletarUsuario(int idUsuario) {

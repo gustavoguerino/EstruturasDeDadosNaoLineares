@@ -18,14 +18,16 @@
             <h1>Coleguinha's Book</h1>
             <div class='container'>
                 <img alt='user.png' src='user.png' id='user-img'/>
-                <p><span id='user-name'><%= String.format("%s (id %d)", request.getAttribute("userName").toString(), Integer.parseInt(request.getAttribute("userId").toString())) %></span></p>
+                <p><span id='user-name'><%= String.format("%s ID #%d", request.getAttribute("userName").toString(), Integer.parseInt(request.getAttribute("userId").toString()))%></span></p>
                 <p>
                     <%
                         ArrayList<Amizade> sugestoesAmizades = (ArrayList<Amizade>) request.getAttribute("sugestoesAmizades");
                         for (Amizade amizade : sugestoesAmizades) {
-                            out.println(String.format("<p><b>Amigo %s: </b>%s (valor da amizade: %.1f)</p>", 
-                                    amizade.getPessoaOrigem().getValor(),
+                            out.println(String.format("<p><b>%s#%d</b>, amigo de %s#%d. Valor da amizade =  %.1f.</p>",
                                     amizade.getPessoaDestino().getValor(),
+                                    amizade.getPessoaDestino().getChave(),
+                                    amizade.getPessoaOrigem().getValor(),
+                                    amizade.getPessoaOrigem().getChave(),
                                     amizade.getValorAmizade()));
                         }
                     %>
