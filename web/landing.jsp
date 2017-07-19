@@ -20,10 +20,11 @@
             <div class='container'>
                 <img alt='user.png' src='user.png' id='user-img'/>
                 <p><span id='user-name'><%= String.format("%s ID #%d", request.getAttribute("userName").toString(), Integer.parseInt(request.getAttribute("userId").toString()))%></span></p>
-                <br/><br/>
-                <form >
+                <h4><b>Mudar grau de amizade</b></h4>
+                <form action="AutenticacaoServlet">
+                    <input type="hidden" name="user" value="<%= request.getAttribute("userId").toString() %>" />
                     Amigos: 
-                    <select name="amigos">
+                    <select name="amigo">
                         <% ArrayList<Vertices> lista = (ArrayList) request.getAttribute("ListaAmigos");
                             for (Vertices amg :  lista) { %>
                             <option value="<%= amg.getChave()%>">

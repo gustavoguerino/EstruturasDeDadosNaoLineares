@@ -44,7 +44,7 @@ public class RedeSocial {
     public static void criarGrafo() throws IOException {
         initialize();
         String fileContents = new String(Files.readAllBytes(
-                Paths.get("C:\\Users\\Casa\\Documents\\Pastas Pessoais\\Albert\\Estrutura de Dados II\\EstruturasDeDadosNaoLineares\\grafo2.txt")
+                Paths.get("/home/joaopaulo/tads/EstruturasDeDadosNaoLineares/grafo2.txt")
         ), StandardCharsets.UTF_8);
 
         ArrayList<String> nomes = gerarNomes();
@@ -82,8 +82,9 @@ public class RedeSocial {
     
     public static void alterarGrau(int idUser, int idAmigo, int grau){
         Vertices usuario = grafo.vertices().get(grafo.achaIndice(idUser));
+        Vertices amigo = grafo.vertices().get(grafo.achaIndice(idAmigo));
         amizades.get(usuario).forEach((arestas) -> {
-            if(arestas.getVerticeDestino() == grafo.vertices().get(grafo.achaIndice(idAmigo))){
+            if(arestas.getVerticeDestino().equals(amigo)){
                 arestas.setValor(grau);
             }
         });

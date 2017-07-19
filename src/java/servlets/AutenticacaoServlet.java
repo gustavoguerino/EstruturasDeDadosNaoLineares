@@ -11,16 +11,20 @@ import matriz_adjacencia.Vertices;
 
 @WebServlet(name = "AutenticacaoServlet", urlPatterns = {"/AutenticacaoServlet"})
 public class AutenticacaoServlet extends HttpServlet {
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         Integer userId = request.getParameter("user").equals("") ? 0 : Integer.parseInt(request.getParameter("user"));
         Vertices user = RedeSocial.grafo.vertices().get(RedeSocial.grafo.achaIndice(userId));
+        if (request.getParameter("grau") != null) {
+            RedeSocial.alterarGrau(user.getChave(), Integer.parseInt(request.getParameter("amigo")),
+                    Integer.parseInt(request.getParameter("grau")));
+        }
         request.setAttribute("userId", user.getChave());
         request.setAttribute("userName", user.getValor());
         request.setAttribute("sugestoesAmizades", RedeSocial.sugerirAmizades(userId));
-        request.setAttribute("ListaAmigos",RedeSocial.getListaAmigos(user.getChave()));
+        request.setAttribute("ListaAmigos", RedeSocial.getListaAmigos(user.getChave()));
         request.getRequestDispatcher("/landing.jsp").forward(request, response);
     }
 
