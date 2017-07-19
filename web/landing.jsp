@@ -1,5 +1,6 @@
 <%@page import="dominio.Amizade"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="matriz_adjacencia.Vertices"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -19,6 +20,39 @@
             <div class='container'>
                 <img alt='user.png' src='user.png' id='user-img'/>
                 <p><span id='user-name'><%= String.format("%s ID #%d", request.getAttribute("userName").toString(), Integer.parseInt(request.getAttribute("userId").toString()))%></span></p>
+                <br/><br/>
+                <form >
+                    Amigos: 
+                    <select name="amigos">
+                        <% ArrayList<Vertices> lista = (ArrayList) request.getAttribute("ListaAmigos");
+                            for (Vertices amg :  lista) { %>
+                            <option value="<%= amg.getChave()%>">
+                                <%=  amg.getValor()%>
+                            </option>
+                        <% } %> 		
+                    </select><br/><br/>
+                    Grau de Amizade: 
+                    <select name="grau">
+                        <option value="1">
+                            1
+                        </option>
+                        <option value="2">
+                            2
+                        </option>
+                        <option value="3">
+                            3
+                        </option>
+                        <option value="4">
+                            4
+                        </option>
+                        <option value="5">
+                            5
+                        </option>
+                    </select>
+                    <br/><br/>
+                    <input type="submit" value="Enviar" >
+                </form>
+                    <h3>Amigos Sugeridos: </h3>
                 <p>
                     <%
                         ArrayList<Amizade> sugestoesAmizades = (ArrayList<Amizade>) request.getAttribute("sugestoesAmizades");

@@ -20,6 +20,7 @@ public class AutenticacaoServlet extends HttpServlet {
         request.setAttribute("userId", user.getChave());
         request.setAttribute("userName", user.getValor());
         request.setAttribute("sugestoesAmizades", RedeSocial.sugerirAmizades(userId));
+        request.setAttribute("ListaAmigos",RedeSocial.getListaAmigos(user.getChave()));
         request.getRequestDispatcher("/landing.jsp").forward(request, response);
     }
 
